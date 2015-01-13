@@ -5,8 +5,10 @@
   "ignore": [
     "src",
     "nbproject",
+    "package.json",
     "Gruntfile.js",
-    "README.md"
+    "README.md",
+    ".gitignore"
   ],
   "dependencies": {
     "datatables": "1.10.*"
