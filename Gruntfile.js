@@ -26,8 +26,18 @@ module.exports = function (grunt) {
           'dist/dataTables.lcf.datepicker.fr.min.js': ['src/dataTables.lcf.datepicker.fr.js']
         }
       }
+    },
+    copy: {
+      main: {
+        src: 'src/dataTables.lightColumnFilter.js',
+        dest: 'dist/dataTables.lightColumnFilter.js'
+      },
+      datepicker: {
+        src: 'src/dataTables.lcf.datepicker.fr.js',
+        dest: 'dist/dataTables.lcf.datepicker.fr.js'
+      }
     }
   });
 
-  grunt.registerTask('build', ['uglify']);
+  grunt.registerTask('build', ['uglify', 'copy']);
 };

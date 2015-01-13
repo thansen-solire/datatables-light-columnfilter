@@ -1,5 +1,6 @@
 {
   "name": "datatables-light-columnfilter",
+  "repository": "https://github.com/thansen-solire/datatables-light-columnfilter",
   "author": {
 		"name": "thansen",
 		"url": "http://www.solire.fr"
@@ -10,7 +11,8 @@
     "grunt": "~0.4.1",
     "load-grunt-tasks": "~0.4.0",
     "time-grunt": "~0.3.1",
-    "grunt-contrib-uglify": "~0.6.0"
+    "grunt-contrib-uglify": "~0.6.0",
+    "grunt-contrib-copy": "~0.6.0"
   },
   "engines": {
     "node": ">=0.10.0"
