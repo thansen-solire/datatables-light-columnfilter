@@ -22,11 +22,11 @@ module.exports = function (grunt) {
       },
       my_target: {
         files: {
-          'dist/dataTables.columnFilter.min.js': ['src/dataTables.columnFilter.js'],
+          'dist/dataTables.lightColumnFilter.min.js': ['src/dataTables.lightColumnFilter.js'],
         }
       }
     }
   });
 
-  grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('build', ['uglify']);
 };
