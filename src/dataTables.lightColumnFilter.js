@@ -167,15 +167,7 @@
          * @returns {jQuery}
          */
         dom: function(th){
-          var
-            self = this,
-            time = 200,
-            timeOutId = 0
-          ;
-
-          if ('time' in self.options) {
-            time = self.options.time;
-          }
+          var self = this;
 
           self.elements = $('<input>', {
             type: 'text'
@@ -190,7 +182,15 @@
          * @returns {void}
          */
         bindEvents: function(){
-          var self = this;
+          var
+            self = this,
+            time = 200,
+            timeOutId = 0
+          ;
+
+          if ('time' in self.options) {
+            time = self.options.time;
+          }
 
           self.elements.keyup(function(){
             clearTimeout(timeOutId);
