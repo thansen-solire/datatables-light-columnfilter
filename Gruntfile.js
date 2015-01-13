@@ -23,6 +23,7 @@ module.exports = function (grunt) {
       my_target: {
         files: {
           'dist/dataTables.lightColumnFilter.min.js': ['src/dataTables.lightColumnFilter.js'],
+          'dist/dataTables.lcf.datepicker.fr.min.js': ['src/dataTables.lcf.datepicker.fr.js']
         }
       }
     }

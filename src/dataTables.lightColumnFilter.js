@@ -1,59 +1,130 @@
+/*!
+ * @author Thomas <thansen@solire.fr>
+ * @licence CC BY-NC 4.0 http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * A light filter column pluggin for jquery.dataTables#1.10
+ */
 (function(window, document) {
   var factory = function($, dataTable) {
     'use strict';
 
-    var Column = function(dataTable, index, dataTableColumn, options) {
-      var
-        self = this,
-        defaultOptions
-      ;
+    var
+      /**
+       * Create a new Column instance
+       *
+       * @param {DataTable} dataTable       The DataTables object
+       * @param {integer}   index           The index of the column
+       * @param {DataTable} dataTableColumn The DataTables Column object
+       * @param {object}    options         The columnfilter options for this column
+       *
+       * @returns {Column}
+       */
+      Column = function(dataTable, index, dataTableColumn, options) {
+        var
+          self = this,
+          defaultOptions,
+          methods = [
+            'dom',
+            'bindEvents',
+            'request'
+          ]
+        ;
 
-      if (options.type in ColumnFilter.filter) {
-        defaultOptions = $.extend({}, ColumnFilter.filter[options.type]);
-      } else {
-        defaultOptions = {};
+        if (options.type in ColumnFilter.filter) {
+          defaultOptions = $.extend({}, ColumnFilter.filter[options.type]);
+        } else {
+          defaultOptions = {};
+        }
+        self.options = $.extend({}, defaultOptions, options);
+
+        $.each(methods, function(ii, method){
+          if (method in self.options) {
+            self[method] = self.options[method];
+          }
+        })
+
+        self.dataTable = dataTable;
+        self.dataTableColumn = dataTableColumn;
+        self.index = index;
+      },
+      /**
+       * Create a new ColumnFilter instance
+       *
+       * @param {DataTable} dataTable The DataTables object
+       * @param {object}    options   The columnfilter options
+       *
+       * @returns {ColumnFilter}
+       */
+      ColumnFilter = function(dataTable, options) {
+        var self = this;
+
+        self.columns = [];
+        self.dataTable = null;
+        self.init(dataTable, options);
       }
-      self.options = $.extend({}, defaultOptions, options);
+    ;
 
-      if ('dom' in self.options) {
-        self.dom = self.options.dom;
-      } else {
-        self.dom = function(){}
+    Column.prototype = {
+      /**
+       * Build the form DOM elements
+       *
+       * @param {type} th The th element where to put the elements
+       *
+       * @returns {jQuery}
+       */
+      dom: function(th){},
+      /**
+       * Binds event to the DOM elements
+       *
+       * @returns {void}
+       */
+      bindEvents: function(){},
+      /**
+       * Return the searched string
+       *
+       * @returns {string}
+       */
+      request: function(){},
+      /**
+       * Trigger the datatable search with the request
+       *
+       * @returns {void}
+       */
+      search: function(){
+        var self = this;
+
+        self
+          .dataTableColumn
+          .search(self.request())
+          .draw()
+        ;
       }
-
-      if ('search' in self.options) {
-        self.search = self.options.search;
-      } else {
-        self.search = function(){}
-      }
-
-      self.dataTable = dataTable;
-      self.dataTableColumn = dataTableColumn;
-      self.index = index;
     }
 
-    var ColumnFilter = function(dataTable, options) {
-      var self = this;
-
-      self.columns = [];
-      self.dataTable = null;
-      self.init(dataTable, options);
-    };
-
     ColumnFilter.prototype = {
+      /**
+       * Initialize the filter pluggin
+       *
+       * @param {DataTable} dataTable
+       * @param {object}    options
+       *
+       * @returns {void}
+       */
       init: function(dataTable, options){
         var
           self = this,
-          tr = $('<tr>').appendTo(dataTable.table().header())
+          tr
         ;
 
         self.dataTable = dataTable;
+
+        tr = $('<tr>').appendTo(self.dataTable.table().header());
 
         self.dataTable.columns().eq(0).each(function(index){
           var
             columnOptions = index in options ? options[index] : {},
             column = new Column(
-              dataTable,
+              self.dataTable,
               index,
               self.dataTable.column(index),
               columnOptions
@@ -63,75 +134,131 @@
           self.columns.push(column);
 
           column.dom(th);
+          column.bindEvents();
         });
       },
+      /**
+       * Add a custom filter
+       *
+       * @param {string} name
+       * @param {object} filter
+       *
+       * @returns {void}
+       */
       addFilter: function(name, filter){
         ColumnFilter.filter[name] = filter;
       }
     };
 
+    /**
+     * Default Column configuration
+     */
     ColumnFilter.default = {
       type: 'text'
     };
 
-    ColumnFilter.filter = {};
+    ColumnFilter.filter = {
+      text: {
+        /**
+         * Build the form DOM elements
+         *
+         * @param {type} th The th element where to put the elements
+         *
+         * @returns {jQuery}
+         */
+        dom: function(th){
+          var
+            self = this,
+            time = 200,
+            timeOutId = 0
+          ;
 
-    ColumnFilter.filter.text = {
-      /**
-       * Build the form DOM element
-       *
-       * @returns {jQuery}
-       */
-      dom: function(th){
-        var self = this;
+          if ('time' in self.options) {
+            time = self.options.time;
+          }
 
-        self.elements = $('<input>', {
-          type: 'text'
-        }).appendTo(th);
-
-        self.elements.keyup(function(){
-          self.dataTableColumn
-              .search(self.search())
-              .draw();
-        });
-
-        return this.elements;
-      },
-      /**
-       * Return the searched string
-       *
-       * @returns {string}
-       */
-      search: function(){
-        return this.elements.val();
-      }
-    };
-
-    ColumnFilter.filter.dateRange = {
-      separator: '~',
-      dom: function(th){
-        var self = this;
-
-        self.elements = $('<input>', {
-          type: 'text'
-        }).add($('<input>', {
+          self.elements = $('<input>', {
             type: 'text'
-        })).appendTo(th);
+          }).appendTo(th);
 
-        self.elements.focusout(function(){
-          self.dataTableColumn
-              .search(self.search())
-              .draw();
-        });
 
-        return self.elements;
+          return self.elements;
+        },
+        /**
+         * Binds event to the DOM elements
+         *
+         * @returns {void}
+         */
+        bindEvents: function(){
+          var self = this;
+
+          self.elements.keyup(function(){
+            clearTimeout(timeOutId);
+            timeOutId = window.setTimeout(function(){
+              self.search();
+            }, time);
+          });
+        },
+        /**
+         * Return the searched string
+         *
+         * @returns {string}
+         */
+        request: function(){
+          var self = this;
+
+          return self.elements.val();
+        }
       },
-      search: function(){
-        var search = [];
-        this.elements.each(function(){
-          search.push($(this).val());
-        });
-        return search.join(this.options.separator);
+      dateRange: {
+        separator: '~',
+        /**
+         * Build the form DOM elements
+         *
+         * @param {type} th The th element where to put the elements
+         *
+         * @returns {jQuery}
+         */
+        dom: function(th){
+          var self = this;
+
+          self.elements = $('<input>', {
+            type: 'text'
+          }).add($('<input>', {
+              type: 'text'
+          })).appendTo(th);
+
+          return self.elements;
+        },
+        /**
+         * Binds event to the DOM elements
+         *
+         * @returns {void}
+         */
+        bindEvents: function(){
+          var self = this;
+
+          self.elements.change(function(){
+            self.search();
+          });
+        },
+        /**
+         * Return the searched string
+         *
+         * @returns {string}
+         */
+        request: function(){
+          var
+            self = this,
+            request = []
+          ;
+
+          self.elements.each(function(){
+            request.push($(this).val());
+          });
+
+          return request.join(self.options.separator);
+        }
       }
     };
 
