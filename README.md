@@ -1,5 +1,5 @@
 # datatables-light-columnfilter
-a dataTables lightColumnFilter for jquery datatables 1.10
+a dataTables light columnFilter for jquery datatables 1.10 (server side)
 
 To install 
 ```bash
