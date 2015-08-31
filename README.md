@@ -1,14 +1,53 @@
 # datatables-light-columnfilter
 a dataTables light columnFilter for jquery datatables 1.10 (server side processing only)
 
-Warning : this only works for server-side processing 
+**Warning : this only works for server-side processing**
 
-To install 
+## To install
 ```bash
 bower install datatables-light-columnfilter
 ```
 
-To configure
+## To configure :
+
+The main config is an associative object, the key being the column's index.
+
+There is currently only two filter type:
+- text
+- dateRange
+
+The text filter has one parameter 'time'.
+The dateRange parameter has one parameter 'separator'.
+
+There's an example of a custom fitler, it's a DateRange with allows you to use bootstrap datepicker and its events.
+
+```javascript
+var config = {
+  index: columnConfig,
+  (...)
+  index: columnConfig
+};
+
+var columnConfig = {
+  type: (text|dateRange),
+  /**
+   * time in ms
+   * @use with "text" filter
+   * @type {int}
+   * @default 200
+   */
+  time: 200,
+  /**
+    * string separating the start and the end date
+    * @use with "dateRange" filter
+    * @type {string}
+    * @default '~'
+    */
+  separator : '~'
+};
+```
+
+## Example
 ```javascript
 var dt = $('#table').DataTable({
   "ajax": {
@@ -39,11 +78,11 @@ var dt = $('#table').DataTable({
     }
 });
 new $.fn.dataTable.ColumnFilter(dt, {
-  "0": {
-    "type": "text"
+  0: {
+    type: 'text'
   },
-  "2": {
-    "type": "dateRange"
+  2: {
+    type: 'dateRange'
   }
 });
 ```
