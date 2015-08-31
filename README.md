@@ -19,7 +19,7 @@ There is currently only two filter type:
 The text filter has one parameter 'time'.
 The dateRange parameter has one parameter 'separator'.
 
-There's an example of a custom fitler, it's a DateRange with allows you to use bootstrap datepicker and its events.
+There's an example of a custom fitler, it's a DateRange with allows you to use [bootstrap datepicker](https://github.com/eternicode/bootstrap-datepicker) and its events : [dataTables.lcf.datepicker.fr.js](https://github.com/thansen-solire/datatables-light-columnfilter/blob/master/src/dataTables.lcf.datepicker.fr.js)
 
 ```javascript
 var config = {
