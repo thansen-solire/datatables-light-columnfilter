@@ -122,15 +122,25 @@
 
         self.dataTable.columns().eq(0).each(function(index){
           var
-            columnOptions = index in options ? options[index] : {},
-            column = new Column(
-              self.dataTable,
-              index,
-              self.dataTable.column(index),
-              columnOptions
-            ),
-            th = $('<th>').appendTo(tr)
+            className = self.dataTable.column(index).header().className,
+            never = className.match(/\bnever\b/),
+            columnOptions,
+            column,
+            th
           ;
+
+          if (never && ('responsive' in self.dataTable)) {
+            return;
+          }
+
+          columnOptions = index in options ? options[index] : {};
+          column = new Column(
+            self.dataTable,
+            index,
+            self.dataTable.column(index),
+            columnOptions
+          );
+          th = $('<th>').appendTo(tr);
           self.columns.push(column);
 
           column.dom(th);
