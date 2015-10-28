@@ -23,7 +23,8 @@ module.exports = function (grunt) {
       my_target: {
         files: {
           'dist/dataTables.lightColumnFilter.min.js': ['src/dataTables.lightColumnFilter.js'],
-          'dist/dataTables.lcf.datepicker.fr.min.js': ['src/dataTables.lcf.datepicker.fr.js']
+          'dist/dataTables.lcf.datepicker.fr.min.js': ['src/dataTables.lcf.datepicker.fr.js'],
+          'dist/dataTables.lcf.bootstrap3.min.js': ['src/dataTables.lcf.bootstrap3.js']
         }
       }
     },
@@ -32,6 +33,10 @@ module.exports = function (grunt) {
         src: 'src/dataTables.lightColumnFilter.js',
         dest: 'dist/dataTables.lightColumnFilter.js'
       },
+      bootstrap3: {
+        src: 'src/dataTables.lcf.bootstrap3.js',
+        dest: 'dist/dataTables.lcf.bootstrap3.js'
+      },
       datepicker: {
         src: 'src/dataTables.lcf.datepicker.fr.js',
         dest: 'dist/dataTables.lcf.datepicker.fr.js'
@@ -39,5 +44,5 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('default', ['uglify', 'copy']);
 };

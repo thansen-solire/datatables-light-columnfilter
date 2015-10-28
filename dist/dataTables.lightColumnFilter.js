@@ -220,6 +220,35 @@
           return self.elements.val();
         }
       },
+      select: {
+        dom: function(th){
+          var self = this, select;
+
+          select = $('<select>').append('<option></option>');
+
+          select.addClass(self.options.cssClass);
+
+          $.each(self.options.values, function(ii, value){
+            $('<option>').val(value.value).text(value.label).appendTo(select);
+          });
+
+          self.elements = select.appendTo(th);
+
+          return self.elements;
+        },
+        bindEvents: function(){
+          var self = this;
+
+          self.elements.on('change', function(){
+            self.search();
+          });
+        },
+        request: function(){
+          var self = this;
+
+          return self.elements.val();
+        }
+      },
       dateRange: {
         separator: '~',
         /**
