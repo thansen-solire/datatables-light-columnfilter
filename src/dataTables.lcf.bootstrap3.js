@@ -50,16 +50,27 @@
     $.extend(ColumnFilter.filter.dateRange, ColumnFilter.filter.dateRangeBase, {
       separator: '~',
       dom: function(th) {
-        ColumnFilter.filter.dateRangeBase.dom.call(this, th);
+          var self = this, input1, input2;
 
-        this.elements.addClass('form-control input-sm');
+          this.div = $('<div>').addClass('input-group input-daterange');
+          input1 = $('<input>', {
+            type: 'text'
+          }).addClass('form-control input-sm').attr('name', 'start').appendTo(this.div);
 
-        return this.elements;
+          input2 = $('<input>', {
+            type: 'text'
+          }).addClass('form-control input-sm').attr('name', 'end').appendTo(this.div);
+
+          this.elements = input1.add(input2);
+
+          this.div.appendTo(th);
+
+          return this.elements;
       },
       bindEvents: function () {
         var self = this;
 
-        self.elements.datepicker().on('changeDate', function () {
+        this.div.datepicker('clearDates').on('changeDate', function () {
           self.search();
         });
       },
