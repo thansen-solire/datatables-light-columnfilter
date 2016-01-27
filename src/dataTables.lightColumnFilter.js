@@ -146,6 +146,15 @@
           column.dom(th);
           column.bindEvents();
         });
+
+        // Hide and Show column filter th according to datatable build-in columns visibility
+        $(self.dataTable.table().node()).on('column-visibility.dt', function (e, settings, column, state) {
+          if (state) {
+            $('th', tr).eq(column - 1).show()
+          } else {
+            $('th', tr).eq(column - 1).hide()
+          }
+        });
       },
       /**
        * Add a custom filter
