@@ -192,6 +192,9 @@
             type: 'text'
           }).appendTo(th);
 
+          if (typeof self.options.width !== 'undefined') {
+            self.elements.css('width', self.options.width);
+          }
 
           return self.elements;
         },
@@ -243,6 +246,10 @@
 
           self.elements = select.appendTo(th);
 
+          if (typeof self.options.width !== 'undefined') {
+            self.elements.css('width', self.options.width);
+          }
+
           return self.elements;
         },
         bindEvents: function(){
@@ -275,6 +282,10 @@
           }).add($('<input>', {
               type: 'text'
           })).appendTo(th);
+
+          if (typeof self.options.width !== 'undefined') {
+            self.elements.css('width', self.options.width);
+          }
 
           return self.elements;
         },

@@ -79,7 +79,8 @@ var dt = $('#table').DataTable({
 });
 new $.fn.dataTable.ColumnFilter(dt, {
   0: {
-    type: 'text'
+    type: 'text',
+    width: '80px' // you can specify a width for each field
   },
   2: {
     type: 'dateRange'
