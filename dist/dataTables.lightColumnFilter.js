@@ -194,6 +194,8 @@
 
           if (typeof self.options.width !== 'undefined') {
             self.elements.css('width', self.options.width);
+          } else {
+            self.elements.css('width', '100%');
           }
 
           return self.elements;
@@ -248,6 +250,8 @@
 
           if (typeof self.options.width !== 'undefined') {
             self.elements.css('width', self.options.width);
+          } else {
+            self.elements.css('width', '100%');
           }
 
           return self.elements;
@@ -285,6 +289,8 @@
 
           if (typeof self.options.width !== 'undefined') {
             self.elements.css('width', self.options.width);
+          } else {
+            self.elements.css('width', '50%');
           }
 
           return self.elements;
