@@ -12,42 +12,87 @@ bower install datatables-light-columnfilter
 
 The main config is an associative object, the key being the column's index.
 
-There is currently only two filter type:
+
+**Now All HTML5 input types and Attributes are Valid**
 - text
-- dateRange
+- color
+- date
+- datetime
+- datetime-local
+- email
+- month
+- number
+- range
+- search
+- tel
+- time
+- url
+- week
 
-The text filter has one parameter 'time'.
-The dateRange parameter has one parameter 'separator'.
+The Older Type dateRange are @deprecated
 
-There's an example of a custom fitler, it's a DateRange which allows you to use [bootstrap datepicker](https://github.com/eternicode/bootstrap-datepicker) and its events : [dataTables.lcf.datepicker.fr.js](https://github.com/thansen-solire/datatables-light-columnfilter/blob/master/src/dataTables.lcf.datepicker.fr.js)
+
+We support now the Tag **select** and **input**, for that works, now is necesary declare the HTML type in a new key,value pair call html in configuration object:
+
+html : "input" | "select" | "range"
+
+
+The new "range"  filter is more powerfull the older dateRange, this filter now support all HTML5 input tipes, so if you need display a range of dates only need create a object { html : "range", type : "date" }  in your configuration object
+
 
 ```javascript
 var config = {
   index: columnConfig,
-  (...)
-  index: columnConfig
+
 };
 
 var columnConfig = {
-  type: (text|dateRange),
+  html: (input|range|select)
+
+  /**
+   * HTML5 type data
+   * @use with "input" and "range" filter
+   * @type {String}
+   * @default text
+   */  
+  type: (text|color|date|datetime|datetime-local|email|month|number|range|search|tel|time|url|week),
   /**
    * time in ms
-   * @use with "text" filter
+   * @use with "input" filter
    * @type {int}
    * @default 200
    */
   time: 200,
   /**
-    * string separating the start and the end date
-    * @use with "dateRange" filter
-    * @type {string}
-    * @default '~'
-    */
-  separator : '~'
+   * if the search is send to server to search like regular expression instead a plain text
+   * @use with "input" filter
+   * @type {boolean}
+   * @default false
+   */
+  regexp: true,
+
+
+  /**
+   * values is a Array
+   * @use with "select" filter
+   * @type {array}
+   */
+  values: [{
+      value: 'A',  label: "Label A"
+  }, {
+      value: 'B',  label: "Label B"
+  }, {
+      value: 'C',  label: "Label C"
+  }, {
+      value: 'D',  label: "Label D"
+  }, {
+      value: 'E',  label: "Label E"
+  }]
+
 };
 ```
 
-## Example
+### Example
 ```javascript
 var dt = $('#table').DataTable({
   "ajax": {
@@ -65,9 +110,73 @@ var dt = $('#table').DataTable({
     {
       "orderable": true,
       "searchable": true,
-      "data": "firstname",
-      "name": "firstname",
-      "title": "First name"
+      "data": "email",
+      "name": "email",
+      "title": "Email"
+    },
+    {
+      "orderable": true,
+      "searchable": true,
+      "data": "label",
+      "name": "labelSelected",
+      "title": "Label"
+    }
+});
+
+new $.fn.dataTable.ColumnFilter(dt, {
+  0: {
+    html: 'input'
+    type: 'text',
+    regexp : true
+  },
+  1: {
+    html: 'input',
+    type: 'url',
+    width: '80px' // you can specify a width for each field
+  }
+  2: {
+    html: 'select',
+    values: [{
+        value: 'A',  label: "Label A"
+    }, {
+        value: 'B',  label: "Label B"
+    }, {
+        value: 'C',  label: "Label C"
+    }, {
+        value: 'D',  label: "Label D"
+    }, {
+        value: 'E',  label: "Label E"
+    }]
+  }
+});
+```
+
+
+## Beta features
+
+Now we are testing a best way to pass all attributes your want for each filter element. At moment you can declare a object "attr" in each filter and add to this object all attributes your need. This feature now is only in Beta.
+
+### Example
+```javascript
+var dt = $('#table').DataTable({
+  "ajax": {
+    "url": "data.json",
+    "type": "POST"
+  },
+  "columns": [
+    {
+      "orderable": true,
+      "searchable": true,
+      "data": "name",
+      "name": "name",
+      "title": "Name"
+    },
+    {
+      "orderable": true,
+      "searchable": true,
+      "data": "quantity",
+      "name": "quantity",
+      "title": "Quantity"
     },
     {
       "orderable": true,
@@ -77,13 +186,16 @@ var dt = $('#table').DataTable({
       "title": "Date of birth"
     }
 });
+
 new $.fn.dataTable.ColumnFilter(dt, {
-  0: {
-    type: 'text',
-    width: '80px' // you can specify a width for each field
-  },
-  2: {
-    type: 'dateRange'
+  1: {
+    html: 'input',
+    type: 'number',
+    attr:{
+      name:"quantity",
+      min:"1",
+      max:"5",
+    }
   }
 });
 ```
