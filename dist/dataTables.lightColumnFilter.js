@@ -132,6 +132,10 @@
           if (never && ('responsive' in self.dataTable)) {
             return;
           }
+          
+          if (!self.dataTable.column(index).visible()) {
+						return;
+					}
 
           columnOptions = index in options ? options[index] : {};
           column = new Column(
@@ -197,6 +201,10 @@
           } else {
             self.elements.css('width', '100%');
           }
+          
+          if (typeof self.options.cssClass !== 'undefined') {
+						self.elements.addClass(self.options.cssClass);
+					}
 
           return self.elements;
         },
