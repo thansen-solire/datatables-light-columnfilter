@@ -30,8 +30,8 @@
           ]
         ;
 
-        if (options.type in ColumnFilter.filter) {
-          defaultOptions = $.extend({}, ColumnFilter.filter[options.type]);
+        if (options.html in ColumnFilter.filter) {
+          defaultOptions = $.extend({}, ColumnFilter.filter[options.html]);
         } else {
           defaultOptions = {};
         }
@@ -90,12 +90,13 @@
        *
        * @returns {void}
        */
-      search: function(){
-        var self = this;
+      search: function(regex){
+        var self  = this,
+            regex = regex || false;
 
         self
           .dataTableColumn
-          .search(self.request())
+          .search(self.request(),regex)
           .draw()
         ;
       }
@@ -154,9 +155,9 @@
         // Hide and Show column filter th according to datatable build-in columns visibility
         $(self.dataTable.table().node()).on('column-visibility.dt', function (e, settings, column, state) {
           if (state) {
-            $('th', tr).eq(column - 1).show()
+            $('th', tr).eq(column).show()
           } else {
-            $('th', tr).eq(column - 1).hide()
+            $('th', tr).eq(column).hide()
           }
         });
       },
@@ -177,11 +178,11 @@
      * Default Column configuration
      */
     ColumnFilter.default = {
-      type: 'text'
+      type: 'input'
     };
 
     ColumnFilter.filter = {
-      text: {
+      input: {
         /**
          * Build the form DOM elements
          *
@@ -193,8 +194,13 @@
           var self = this;
 
           self.elements = $('<input>', {
-            type: 'text'
+            type: self.options.type || 'text'
           }).appendTo(th);
+
+
+          $.each(self.options.attr, function(key, value){
+            self.elements.attr(key,value);
+          })
 
           if (typeof self.options.width !== 'undefined') {
             self.elements.css('width', self.options.width);
@@ -213,6 +219,7 @@
           var
             self = this,
             time = 200,
+            regex = false,
             timeOutId = 0
           ;
 
@@ -220,10 +227,14 @@
             time = self.options.time;
           }
 
+          if ('regex' in self.options){
+            regex = self.options.regex;
+          }
+
           self.elements.keyup(function(){
             clearTimeout(timeOutId);
             timeOutId = window.setTimeout(function(){
-              self.search();
+              self.search(regex);
             }, time);
           });
         },
@@ -242,9 +253,12 @@
         dom: function(th){
           var self = this, select;
 
-          select = $('<select>').append('<option></option>');
-
+          select = $('<select>');
           select.addClass(self.options.cssClass);
+
+          if(self.options.values.length == 0){
+             $('<option>').appendTo(select);
+          }
 
           $.each(self.options.values, function(ii, value){
             $('<option>').val(value.value).text(value.label).appendTo(select);
@@ -269,11 +283,10 @@
         },
         request: function(){
           var self = this;
-
           return self.elements.val();
         }
       },
-      dateRange: {
+      range: {
         separator: '~',
         /**
          * Build the form DOM elements
@@ -286,9 +299,9 @@
           var self = this;
 
           self.elements = $('<input>', {
-            type: 'text'
+            type: self.options.type || 'text'
           }).add($('<input>', {
-              type: 'text'
+              type: self.options.type || 'text'
           })).appendTo(th);
 
           if (typeof self.options.width !== 'undefined') {
