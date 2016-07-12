@@ -1,7 +1,7 @@
 {
   "name": "datatables-light-columnfilter",
   "license": "CC by-nc",
-  "main": "dist/dataTables.lightColumnFilter.min.js",
+  "main": "dist/dataTables.lightColumnFilter.js",
   "ignore": [
     "src",
     "nbproject",
