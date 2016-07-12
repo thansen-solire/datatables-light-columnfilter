@@ -199,7 +199,7 @@
 
 
           $.each(self.options.attr, function(key, value){
-            self.elements.attr(key,value);  
+            self.elements.attr(key,value);
           })
 
           if (typeof self.options.width !== 'undefined') {
