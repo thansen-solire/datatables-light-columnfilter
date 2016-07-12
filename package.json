@@ -5,7 +5,7 @@
 		"name": "thansen",
 		"url": "http://www.solire.fr"
 	},
-  "license": "CC by-nc",
+  "license": "CC-BY-NC-1.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

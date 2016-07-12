@@ -133,6 +133,10 @@
             return;
           }
 
+          if (!self.dataTable.column(index).visible()){
+            return;
+          }
+
           columnOptions = index in options ? options[index] : {};
           column = new Column(
             self.dataTable,
