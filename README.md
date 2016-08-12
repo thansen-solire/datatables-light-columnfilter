@@ -35,7 +35,7 @@ We now support the tags `select` and `input`, in order to work it is necessary t
 html : "input" | "select" | "range"
 
 
-The new `range` filter is more powerfull the older `dateRange`, this filter now support all HTML5 input types, so if you need to display a range of dates you only need create a object `{ html : 'range', type :'date' }` in your configuration object.
+The new `range` filter is more powerfull the older `dateRange`, this filter now support all HTML5 input types, so if you need to display a range of dates you only need to create an object `{ html : 'range', type :'date' }` in your configuration object.
 
 
 ```javascript
