@@ -14,33 +14,46 @@
 
     $.fn.datepicker.defaults.format = 'dd/mm/yyyy';
 
-    $.extend(ColumnFilter.filter.dateRange, {
-      separator: '~',
-      bindEvents: function(){
-        var self = this;
+    ColumnFilter.filter.rangeBase = $.extend(true, {}, ColumnFilter.filter.range);
+    ColumnFilter.filter.range = {};
+    $.extend(
+      ColumnFilter.filter.range,
+      ColumnFilter.filter.rangeBase,
+      {
+        separator: '~',
+        dom: function (th) {
+          ColumnFilter.filter.rangeBase.dom.call(this, th);
 
-        self.elements.datepicker().on('changeDate', function(){
-          self.search();
-        });
-      },
-      format: function(value){
-        return value.split('/').reverse().join('-');
-      },
-      request: function(){
-        var
-          self = this,
-          search = []
-        ;
+          this.elements.addClass('form-control input-sm');
 
-        self.elements.each(function(){
-          var value = $(this).val();
-          value = self.options.format(value);
-          search.push(value);
-        });
+          return this.elements;
+        },
+        bindEvents: function(){
+          var self = this;
 
-        return search.join(self.options.separator);
+          self.elements.datepicker().on('changeDate', function(){
+            self.search();
+          });
+        },
+        format: function(value){
+          return value.split('/').reverse().join('-');
+        },
+        request: function(){
+          var
+            self = this,
+            search = []
+          ;
+
+          self.elements.each(function(){
+            var value = $(this).val();
+            value = self.options.format(value);
+            search.push(value);
+          });
+
+          return search.join(self.options.separator);
+        }
       }
-    });
+    );
   };
 
   // Define as an AMD module if possible
