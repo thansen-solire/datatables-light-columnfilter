@@ -31,7 +31,7 @@
         ;
 
         if (options.html in ColumnFilter.filter) {
-          defaultOptions = $.extend({}, ColumnFilter.filter[options.html]);
+          defaultOptions = $.extend(true, ColumnFilter.filter[options.html]);
         } else {
           defaultOptions = {};
         }
