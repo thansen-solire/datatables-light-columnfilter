@@ -1,5 +1,6 @@
 {
   "name": "datatables-light-columnfilter",
+  "version": "1.0.5",
   "license": "CC by-nc",
   "main": "dist/dataTables.lightColumnFilter.js",
   "ignore": [

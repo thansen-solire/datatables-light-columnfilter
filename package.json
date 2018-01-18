@@ -1,9 +1,10 @@
 {
   "name": "datatables-light-columnfilter",
+  "version": "1.0.5",
   "repository": "https://github.com/thansen-solire/datatables-light-columnfilter",
   "author": {
-		"name": "thansen",
-		"url": "http://www.solire.fr"
+    "name": "polinome",
+    "url": "https://www.polinome.com"
 	},
   "license": "CC-BY-NC-1.0",
   "dependencies": {},
