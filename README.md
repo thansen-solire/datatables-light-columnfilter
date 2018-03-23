@@ -1,3 +1,5 @@
+DEPRECATED see https://github.com/polinome/datatables-lightcolumnfilter
+
 # datatables-light-columnfilter
 A dataTables light columnFilter for jquery datatables 1.10 (server side processing only)
 
